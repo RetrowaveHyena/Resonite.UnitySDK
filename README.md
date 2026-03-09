@@ -72,6 +72,11 @@ For any larger reworks **please make sure there's an issue created first and inc
 
 If you're not sure what to contribute, check the "help wanted" issues: https://github.com/Yellow-Dog-Man/Resonite.UnitySDK/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22
 
+## Contributions that need changes to Resonite / ResoniteLink
+If you want to contribute features, fixes or other changes that require some changes to be done in Resonite itself (e.g. adding support for new asset type, exposing certain sync methods), please make an issue at: https://github.com/Yellow-Dog-Man/Resonite-Issues/issues
+
+In the additional context, include information that it's for particular Unity SDK contribution - ideally link an issue on this repo as well for context.
+
 ## When to fork instead
 If you need to make changes to the SDK that would negatively affect general conversion, you should create a customized fork instead. This is for cases where you need to make some structural changes to help certain types of projects and content better, but that would break compatibility with other type of content.
 
