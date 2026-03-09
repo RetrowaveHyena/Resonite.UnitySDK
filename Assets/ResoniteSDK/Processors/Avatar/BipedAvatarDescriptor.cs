@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BipedAvatarDescriptor : MonoBehaviour, IResoniteLinkPostProcessor
 {
+    const float AXIS_LENGTH = 0.25f;
+
     public bool IsValid => Biped != null && HeadReference != null && LeftHandReference != null && RightHandReference != null;
 
     [NonSerialized]
@@ -63,5 +65,43 @@ public class BipedAvatarDescriptor : MonoBehaviour, IResoniteLinkPostProcessor
         }).Wait();
 
         AvatarConverted = true;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (HeadReference != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(HeadReference.position, 0.1f);
+            DrawAxes(HeadReference);
+        }
+
+        if (LeftHandReference != null)
+            DrawHand(LeftHandReference, Color.cyan);
+
+        if (RightHandReference != null)
+            DrawHand(RightHandReference, Color.red);
+    }
+
+    void DrawHand(Transform transform, Color handColor)
+    {
+        Gizmos.color = handColor;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(0.05f, 0.01f, 0.1f));
+        Gizmos.matrix = Matrix4x4.identity;
+
+        DrawAxes(transform);
+    }
+
+    void DrawAxes(Transform transform)
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + transform.forward * AXIS_LENGTH);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + transform.up * AXIS_LENGTH);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + transform.right * AXIS_LENGTH);
     }
 }
