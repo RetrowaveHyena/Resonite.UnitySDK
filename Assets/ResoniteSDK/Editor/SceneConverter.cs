@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Unity.VisualScripting;
@@ -18,6 +19,8 @@ public class SceneConverter : IConversionContext
 {
     public string UniqueSessionId => _window.UniqueSessionId;
     public LinkInterface Link => _window.Link;
+
+    public bool IsRealtimeModeActive { get; private set; }
 
     // TODO!!! Move this to a dedicated connection manager so the Window is only managing the UI?
     ResoniteLinkWindow _window;
@@ -199,16 +202,26 @@ public class SceneConverter : IConversionContext
 
     public void StartRealtimeMode()
     {
+        if (IsRealtimeModeActive)
+            throw new InvalidOperationException("Realtime mode is already active");
+
         // We must convert the whole scene first
         ConvertScene();
 
         // Start listening to events
         ObjectChangeEvents.changesPublished += ObjectChangeEvents_changesPublished;
+
+        IsRealtimeModeActive = true;
     }
 
     public void StopRealtimeMode()
     {
+        if (!IsRealtimeModeActive)
+            throw new InvalidOperationException("Realtime mode is not active");
+
         ObjectChangeEvents.changesPublished -= ObjectChangeEvents_changesPublished;
+
+        IsRealtimeModeActive = false;
     }
 
     public void ConvertScene()

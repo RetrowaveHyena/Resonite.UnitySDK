@@ -59,6 +59,8 @@ public class ResoniteLinkWindow : EditorWindow
 
     void OnGUI()
     {
+        EnsureConverter();
+
         GUI.enabled = State == ConnectionState.Disconnected;
         Port = EditorGUILayout.IntField("Port: ", Port);
 
@@ -75,17 +77,29 @@ public class ResoniteLinkWindow : EditorWindow
 
         GUILayout.Space(16);
 
-        GUI.enabled = State == ConnectionState.Connected;
+        // The current scene can only be sent when the realtime mode isn't active
+        GUI.enabled = State == ConnectionState.Connected && !_converter.IsRealtimeModeActive;
 
         if (GUILayout.Button("Send Current Scene"))
             SendCurrentScene();
 
+        GUI.enabled = State == ConnectionState.Connected;
+
+        if (!_converter.IsRealtimeModeActive)
+        {
+            if (GUILayout.Button("Start Realtime Mode"))
+                StartRealtimeMode();
+        }
+        else
+        {
+            if (GUILayout.Button("STOP Realtime Mode"))
+                StopRealtimeMode();
+        }
+
         GUI.enabled = true;
 
-        if (GUILayout.Button("Start Realtime Mode"))
-            StartRealtimeMode();
-
         GUILayout.Space(32);
+        GUILayout.Label("DEBUGGING:");
 
         if (GUILayout.Button("Cleanup converters in the scene"))
             CleanupConverters();
@@ -117,6 +131,11 @@ public class ResoniteLinkWindow : EditorWindow
         EnsureConverter();
 
         _converter.StartRealtimeMode();
+    }
+
+    void StopRealtimeMode()
+    {
+        _converter.StopRealtimeMode();
     }
 
     void ConnectPressed()
