@@ -160,20 +160,10 @@ public class ResoniteLinkWindow : EditorWindow
             ResetConversionState();
     }
 
-    void SessionClosed(ResoniteLinkSession obj)
-    {
-        
-    }
-
-    void SessionUpdated(ResoniteLinkSession obj)
-    {
-        
-    }
-
-    void SessionDiscovered(ResoniteLinkSession obj)
-    {
-            
-    }
+    // Force an update, which should refresh the UI
+    void SessionClosed(ResoniteLinkSession obj) => EditorApplication.QueuePlayerLoopUpdate();
+    void SessionUpdated(ResoniteLinkSession obj) => EditorApplication.QueuePlayerLoopUpdate();
+    void SessionDiscovered(ResoniteLinkSession obj) => EditorApplication.QueuePlayerLoopUpdate();
 
     void EnsureConverter()
     {
